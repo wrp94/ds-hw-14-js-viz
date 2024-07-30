@@ -27,29 +27,60 @@ function buildCharts(sample) {
 	d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     	// Get the samples field
-
+		let samples = data.samples;
 
 		// Filter the samples for the object with the desired sample number
-
+		let sampleData = samples.filter(sampleObj => sampleObj.id == sample);
 
 		// Get the otu_ids, otu_labels, and sample_values
-
+		let otuIDs = sampleData[0].otu_ids;
+		let otuLabels = sampleData[0].otu_labels;
+		let sampleValues = sampleData[0].sample_values;
 
 		// Build a Bubble Chart
-
+		let bubbleTrace = {
+			x: otuIDs,
+			y: sampleValues,
+			text: otuLabels,
+			mode: "markers",
+			marker: {
+				size: sampleValues,
+				color: otuIDs
+			}
+		};
+		let bubbleData = [bubbleTrace];
+		let bubbleLayout = {
+			title: "Bacteria Cultures Per Sample",
+			showlegend: false,
+			hovermode: "closest",
+			xaxis: {title: "OTU ID"},
+			yaxis: {title: "Number of Bacteria"}
+		};
 
 		// Render the Bubble Chart
-
+		Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
 		// For the Bar Chart, map the otu_ids to a list of strings for your yticks
-
+		let yTicks = otuIDs.map(id => `OTU ${id}`);
 
 		// Build a Bar Chart
 		// Don't forget to slice and reverse the input data appropriately
-
+		let barTrace = {
+			y: yTicks.slice(0, 10).reverse(),
+			x: sampleValues.slice(0, 10).reverse(),
+			text: otuLabels.slice(0, 10).reverse(),
+			type: "bar",
+			orientation: "h"
+		};
+		let barData = [barTrace];
+		let barLayout = {
+			title: "Top 10 Bacteria Cultures Found",
+			margin: { t: 30, l: 100, b: 150, r: 50 },
+			xaxis: {title: "Number of Bacteria Found"}
+		};
 
 		// Render the Bar Chart
-
+		Plotly.newPlot("bar", barData, barLayout);
 	});
 }
 
