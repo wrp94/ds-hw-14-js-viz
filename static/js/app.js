@@ -75,7 +75,7 @@ function buildCharts(sample) {
 		let barData = [barTrace];
 		let barLayout = {
 			title: "Top 10 Bacteria Cultures Found",
-			margin: { t: 30, l: 100, b: 150, r: 50 },
+			margin: { t: 30, l: 100, b: 50, r: 50 },
 			xaxis: {title: "Number of Bacteria Found"}
 		};
 
